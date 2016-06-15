@@ -79,6 +79,13 @@ namespace ts {
                 return combinePaths(this.getDefaultLibLocation(), getDefaultLibFileName(options));
             },
             getCanonicalFileName,
+            getDirectories(path) {
+                path = this.getCanonicalFileName(path);
+                return filter(map(filter(getKeys(virtualFs),
+                    fullpath => startsWith(fullpath, path) && fullpath.substr(path.length, 1) === "/"),
+                        fullpath => fullpath.substr(path.length + 1).indexOf("/") >= 0 ? fullpath.substr(0, 1 + path.length + fullpath.substr(path.length + 1).indexOf("/")) : fullpath),
+                            fullpath => fullpath.lastIndexOf(".") === -1);
+            },
             loadExtension(path) {
                 const fullPath = this.getCanonicalFileName(path);
                 const host = this;
