@@ -88,15 +88,14 @@ namespace ts {
             },
             loadExtension(path) {
                 const fullPath = this.getCanonicalFileName(path);
-                const host = this;
                 const m = {exports: {}};
-                (function(module, exports, require) { eval(virtualFs[fullPath]); })(
+                ((module, exports, require) => { eval(virtualFs[fullPath]); })(
                     m,
                     m.exports,
-                    function(name: string) {
-                        return host.loadExtension(
-                            host.getCanonicalFileName(
-                                ts.resolveModuleName(name, fullPath, {module: ts.ModuleKind.CommonJS}, host, true).resolvedModule.resolvedFileName
+                    (name: string) => {
+                        return this.loadExtension(
+                            this.getCanonicalFileName(
+                                ts.resolveModuleName(name, fullPath, {module: ts.ModuleKind.CommonJS}, this, true).resolvedModule.resolvedFileName
                             )
                         );
                     }
