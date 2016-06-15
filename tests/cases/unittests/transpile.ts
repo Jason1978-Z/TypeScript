@@ -112,7 +112,7 @@ namespace ts {
             });
         }
 
-        transpilesCorrectly("Generates no diagnostics with valid inputs", `var x = 0;`, {
+        /*transpilesCorrectly("Generates no diagnostics with valid inputs", `var x = 0;`, {
             options: { compilerOptions: { module: ModuleKind.CommonJS } }
         });
 
@@ -242,6 +242,25 @@ var x = 0;`, {
 
         transpilesCorrectly("Support options with types values", "const a = 10;", {
             options: { compilerOptions: { types: ["jquery", "typescript"], module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
+        });*/
+
+        debugger;
+        transpilesCorrectly("Correctly serialize metadata when transpile",
+            `import * as ng from "angular2/core";` +
+            `declare function foo(...args: any[]);` +
+            `@foo` +
+            `export class MyClass1 {` +
+            `    constructor(private _elementRef: ng.ElementRef){}` +
+            `}`, {
+            options: {
+                compilerOptions: {
+                    target: ScriptTarget.ES5,
+                    module: ModuleKind.CommonJS,
+                    emitDecoratorMetadata: true,
+                    experimentalDecorators: true,
+                    isolatedModules: true,
+                }
+            }
         });
     });
 }
